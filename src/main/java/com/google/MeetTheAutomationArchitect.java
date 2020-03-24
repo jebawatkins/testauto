@@ -1,5 +1,6 @@
 package com.google;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,23 +15,26 @@ import java.util.concurrent.TimeUnit;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class MeetTheAutomationArchitect {
+
+    private static String searchString = "Automation";
+    WebDriver driver;
+
     @Test
-    public void validatePageTitle(){
-        WebDriver driver = new ChromeDriver();
+    public void validatePageTitle() {
+        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS) ;
         browseToArticle(driver);
         ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         waitForInfoWeekToLoad(driver);
         Assert.assertEquals(driver.getTitle(),"Meet the Automation Architect - InformationWeek");
-        driver.quit();
     }
 
     private void browseToArticle(WebDriver driver) {
         driver.get("https://www.google.com/");
-        driver.findElement(By.name("q")).sendKeys("Automation");
+        driver.findElement(By.name("q")).sendKeys(searchString);
         driver.findElement(By.name("btnK")).click();
-        driver.findElement(By.xpath("//*[@id='hdtb-msb-vis']/div[3]/a")).click();
+        driver.findElement(By.linkText("Images")).click();
         driver.findElement(By.xpath("//div[contains(text(),'Meet the Automation Architect' )]")).click();
     }
 
@@ -40,5 +44,10 @@ public class MeetTheAutomationArchitect {
                 .pollingEvery(Duration.ofMillis(1000))
                 .ignoring(Exception.class);
         fluentWait.until(presenceOfElementLocated(By.id("article-main")));
+    }
+
+    @After()
+    public void cleanUp(){
+        driver.quit();
     }
 }
