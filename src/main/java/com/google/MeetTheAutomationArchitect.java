@@ -28,6 +28,7 @@ public class MeetTheAutomationArchitect {
         driver.switchTo().window(tabs.get(1));
         waitForInfoWeekToLoad(driver);
         Assert.assertEquals(driver.getTitle(),"Meet the Automation Architect - InformationWeek");
+
     }
 
     private void browseToArticle(WebDriver driver) {
